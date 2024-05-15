@@ -25,5 +25,5 @@ Before you begin, ensure you have Node.js installed on your machine. If not, you
 Clone the repository to your local machine:
 
 ```bash
-git clone https://github.com/pknowles-fs/music-app.git
+git clone https://github.com/knowlespaige-fs/music-app.git
 cd music-app
