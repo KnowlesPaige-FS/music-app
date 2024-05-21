@@ -4,8 +4,8 @@ import React from 'react';
 const Circle = props => {
   return (
     <div className="circle-component" style={styles.circleComponent}>
-      <img style={styles.circleImage} src={props.image} alt={props.artistName} />
-      <p style={styles.artistName}>{props.artistName}</p>
+      <img style={styles.circleImage} src={props.image} alt={props.title} />
+      <p style={styles.title}>{props.title}</p>
     </div>
   );
 };
@@ -19,7 +19,7 @@ const styles = {
   circleImage: {
     
   },
-  artistName: {
+  title: {
     
   },
 };
