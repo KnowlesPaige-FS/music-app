@@ -29,7 +29,7 @@ function App() {
 
   useEffect(() => {
     if (code) {
-      axios.post('http://localhost:3000/login', { code })
+      axios.post('http://localhost:4000/login', { code })
         .then(response => {
           setAccessToken(response.data.accessToken);
           window.history.pushState({}, null, '/dashboard');
@@ -48,7 +48,7 @@ function App() {
             <Route path='/' element={<Home />} />
             <Route path='/home' element={<Home />} />
             <Route path='/login' element={<Login clientId={CLIENT_ID} redirectUri={REDIRECT_URI} authEndpoint={AUTH_ENDPOINT} responseType={RESPONSE_TYPE} scopes={SCOPES} />} />
-            <Route path='/signup' element={<Signup />} />
+            <Route path='/signup' element={<Signup clientId={CLIENT_ID} redirectUri={REDIRECT_URI} authEndpoint={AUTH_ENDPOINT} responseType={RESPONSE_TYPE} scopes={SCOPES} />} />
             <Route path='/dashboard' element={<Dashboard accessToken={accessToken} />} />
             <Route path='/albums' element={<Albums />} />
             <Route path='/genre' element={<Genre />} />
