@@ -48,7 +48,7 @@ export default Genre;
 
 const styles = {
   container: {
-    
+    display: 'flex' 
   },
   content: {
     

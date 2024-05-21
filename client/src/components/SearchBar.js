@@ -21,7 +21,7 @@ const SearchBar = props => {
         value={query}
         onChange={handleInputChange}
         onKeyPress={handleKeyPress}
-        placeholder="Search..."
+        placeholder="What do you want to listen to today?"
         style={styles.searchInput}
       />
     </form>

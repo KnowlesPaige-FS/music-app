@@ -55,7 +55,7 @@ export default Dashboard;
 
 const styles = {
   container: {
-   
+    display: 'flex'
   },
   content: {
     
