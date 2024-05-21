@@ -32,7 +32,7 @@ export default SideNavigation;
 
 const styles = {
   nav: {
-    width: '20%',
+    width: '15%',
     height: '100vh',
     padding: '2%',
     backgroundColor: '#2F2F3A',
