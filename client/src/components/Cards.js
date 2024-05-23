@@ -5,10 +5,9 @@ const Cards = props => {
     return (
         <article className="text-center" style={styles.card}>
             <section style={{ ...styles.cardImg, backgroundImage: `url(${props.img})` }}>
-                <div style={styles.overlay}></div>
-                <div style={styles.info}>
-                    <h4 style={styles.title}>{props.title}</h4>
-                </div>
+            </section>
+            <section style={styles.info}>
+                <h4 style={styles.title}>{props.title}</h4>
             </section>
         </article>
     );
@@ -18,18 +17,27 @@ export default Cards;
 
 const styles = {
     card: {
-        
+        width: '200px',
+        border: '1px solid #ccc',
+        borderRadius: '10px',
+        overflow: 'hidden',
+        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+        margin: '2%',
     },
     cardImg: {
-       
-    },
-    overlay: {
-        
+        width: '100%',
+        height: '250px',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        position: 'relative',
     },
     info: {
-      
+        width: '100%',
+        padding: '4%',
     },
     title: {
-        
+        margin: 0,
+        fontSize: '1em',
+        color: '#212529',
     },
 };

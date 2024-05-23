@@ -7,19 +7,19 @@ import Cards from '../components/Cards';
 import NowPlaying from '../components/NowPlaying';
 
 
-function Genre() {
+function Genre({ onLogout }) {
   return (
     <section style={styles.container}>
-      <SideNavigation />
+      <SideNavigation onLogout={onLogout} />
       <section style={styles.content}>
         <header style={styles.header}>
           <SearchBar />
-          {/* <input type="text" placeholder="What do you want to listen to today?" style={styles.searchBar} /> */}
         </header>
         <main style={styles.mainContent}>
           <section style={styles.popularGenres}>
-            <h2>Popular Genres</h2>
+            <h5>Popular Genres</h5>
             <div style={styles.genreList}>
+              <Circle image="" title="" />
               <Circle image="" title="" />
               <Circle image="" title="" />
               <Circle image="" title="" />
@@ -28,7 +28,7 @@ function Genre() {
             </div>
           </section>
           <section style={styles.trendingNow}>
-            <h2>Trending Now</h2>
+            <h5>Trending Now</h5>
             <div style={styles.trendingList}>
               <Cards img="" title="" />
               <Cards img="" title="Trending 2" />
@@ -36,10 +36,10 @@ function Genre() {
             </div>
           </section>
         </main>
-        <aside style={styles.nowPlaying}>
-          <NowPlaying songTitle="Song Title" artist="Artist Name" />
-        </aside>
       </section>
+      <aside style={styles.nowPlaying}>
+        <NowPlaying songTitle="Song Title" artist="Artist Name" />
+      </aside>
     </section>
   );
 }
@@ -48,33 +48,47 @@ export default Genre;
 
 const styles = {
   container: {
-    display: 'flex' 
+    display: 'flex',
   },
   content: {
-    
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    padding: '20px',
   },
   header: {
-    
+    display: 'flex',
+    justifyContent: 'center',
+    padding: '10px',
   },
   searchBar: {
-    
+    width: '300px',
+    padding: '10px',
+    border: '1px solid #DDD',
+    borderRadius: '5px',
   },
   mainContent: {
-   
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    padding: '20px',
   },
   popularGenres: {
-    
+    marginBottom: '30px',
   },
   genreList: {
-    
+    display: 'flex',
+    justifyContent: 'flex-start',
   },
   trendingNow: {
-    
+    marginBottom: '30px',
   },
   trendingList: {
-    
+    display: 'flex',
+    justifyContent: 'flex-start',
   },
   nowPlaying: {
-    
+    marginTop: '10%',
+    marginRight: '2%'
   },
 };

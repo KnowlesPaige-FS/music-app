@@ -32,9 +32,17 @@ export default SearchBar;
 
 const styles = {
   searchBar: {
-    
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    margin: '20px',
   },
   searchInput: {
-    
+    padding: '2.5%',
+    width: '350px',
+    border: '1px solid #ccc',
+    borderRadius: '5px',
+    outline: 'none',
+    fontSize: '1em',
   },
 };

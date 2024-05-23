@@ -1,51 +1,153 @@
 // /* eslint-disable jsx-a11y/img-redundant-alt */
-import React from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import SideNavigation from '../components/SideNav';
 import SearchBar from '../components/SearchBar';
 import Circle from '../components/Circle';
 import Cards from '../components/Cards';
 import SmallCards from '../components/SmallCards';
 import NowPlaying from '../components/NowPlaying';
+import axios from 'axios'
+import { useNavigate } from 'react-router-dom';
 
-function Albums() {
+const Albums = ({ accessToken, onLogout }) => {
+  const [popularAlbums, setPopularAlbums] = useState([]);
+  const [trendingNow, setTrendingNow] = useState([]);
+  const [recentlyPlayed, setRecentlyPlayed] = useState([]);
+  const navigate = useNavigate();
+
+  const fetchRecentlyPlayed = useCallback(() => {
+    if (accessToken) {
+      axios
+        .get('https://api.spotify.com/v1/me/player/recently-played', {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        })
+        .then(response => {
+          setRecentlyPlayed(response.data.items.slice(0, 2));
+        })
+        .catch(err => {
+          console.error('Error fetching recently played:', err);
+        });
+    }
+  }, [accessToken]);
+
+  const fetchPopularAlbums = useCallback(() => {
+    if (accessToken) {
+      axios
+        .get('https://api.spotify.com/v1/browse/new-releases', {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        })
+        .then(response => {
+          setPopularAlbums(response.data.albums.items.slice(1, 7));
+        })
+        .catch(err => {
+          console.error('Error fetching popular albums:', err);
+        });
+    }
+  }, [accessToken]);
+
+  const fetchTrendingNow = useCallback(() => {
+    if (accessToken) {
+      axios
+        .get('https://api.spotify.com/v1/browse/new-releases', {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        })
+        .then(response => {
+          setTrendingNow(response.data.albums.items.slice(0, 4));
+        })
+        .catch(err => {
+          console.error('Error fetching trending now:', err);
+        });
+    }
+  }, [accessToken]);
+
+  useEffect(() => {
+    fetchRecentlyPlayed();
+    fetchPopularAlbums();
+    fetchTrendingNow();
+  }, [fetchRecentlyPlayed, fetchPopularAlbums, fetchTrendingNow]);
+
+  const handleSearch = (query) => {
+    if (accessToken) {
+      axios
+        .get(`https://api.spotify.com/v1/search?q=${query}&type=artist,track,album`, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        })
+        .then(response => {
+          const results = [];
+          if (response.data.artists) {
+            results.push(...response.data.artists.items.slice(0, 6).map(artist => ({
+              name: artist.name,
+              image: artist.images[0]?.url || 'placeholder.jpg',
+              type: 'Artist',
+            })));
+          }
+          if (response.data.tracks) {
+            results.push(...response.data.tracks.items.slice(0, 6).map(track => ({
+              name: track.name,
+              image: track.album.images[0]?.url || 'placeholder.jpg',
+              type: 'Song',
+            })));
+          }
+          if (response.data.albums) {
+            results.push(...response.data.albums.items.slice(0, 6).map(album => ({
+              name: album.name,
+              image: album.images[0]?.url || 'placeholder.jpg',
+              type: 'Album',
+            })));
+          }
+          navigate('/search-results', { state: { results } });
+        })
+        .catch(err => {
+          console.error('Error searching:', err);
+        });
+    }
+  };
+
   return (
     <section style={styles.container}>
-      <SideNavigation />
+      <SideNavigation onLogout={onLogout} />
       <section style={styles.content}>
         <header style={styles.header}>
-          <SearchBar />
+          <SearchBar onSearch={handleSearch} />
         </header>
         <main style={styles.mainContent}>
-          <section style={styles.popularArtists}>
-            <h2>Popular Artists</h2>
-            <div style={styles.artistList}>
-              <Circle image="" title="" />
-              <Circle image="" title="" />
-              <Circle image="" title="" />
-              <Circle image="" title="" />
-              <Circle image="" title="" />
+          <section style={styles.popularAlbums}>
+            <h5>Popular Albums</h5>
+            <div style={styles.albumList}>
+              {popularAlbums.map((album, index) => (
+                <Circle key={index} image={album.images[0]?.url || 'placeholder.jpg'} title={album.name} />
+              ))}
             </div>
           </section>
           <section style={styles.trendingNow}>
-            <h2>Trending Now</h2>
+            <h5>Trending Now</h5>
             <div style={styles.trendingList}>
-              <Cards img="" title="" />
-              <Cards img="" title="Trending 2" />
-              <Cards img="" title="" />
+              {trendingNow.map((album, index) => (
+                <Cards key={index} img={album.images[0]?.url || 'placeholder.jpg'} title={album.name} />
+              ))}
             </div>
           </section>
           <section style={styles.recentlyPlayed}>
-            <h2>Recently Played</h2>
+            <h5>Recently Played</h5>
             <div style={styles.recentList}>
-              <SmallCards img="" artistName="" songTitle=""  />
-              <SmallCards img="" artistName="" songTitle=""  />
+              {recentlyPlayed.map((track, index) => (
+                <SmallCards key={index} image={track.track.album.images[0]?.url || 'placeholder.jpg'} artistName={track.track.artists[0].name} songTitle={track.track.album.name} />
+              ))}
             </div>
           </section>
         </main>
-        <aside style={styles.nowPlaying}>
-          <NowPlaying songTitle="Song Title" artist="Artist Name" />
-        </aside>
       </section>
+      <aside style={styles.nowPlaying}>
+        <NowPlaying songTitle="Song Title" artist="Artist Name" />
+      </aside>
     </section>
   );
 }
@@ -57,36 +159,51 @@ const styles = {
     display: 'flex',
   },
   content: {
-    
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    padding: '20px 20px 0',
   },
   header: {
-    
+    display: 'flex',
+    justifyContent: 'center',
+    padding: '10px',
   },
   searchBar: {
-    
+    width: '300px',
+    padding: '10px',
+    border: '1px solid #DDD',
+    borderRadius: '5px',
   },
   mainContent: {
-    
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    padding: '20px 20px 0',
   },
-  popularArtists: {
-    
+  popularAlbums: {
+    marginBottom: '30px',
   },
-  artistList: {
-    
+  albumList: {
+    display: 'flex',
+    justifyContent: 'flex-start',
   },
   trendingNow: {
-    
+    marginBottom: '30px',
   },
   trendingList: {
-    
+    display: 'flex',
+    justifyContent: 'flex-start',
   },
   recentlyPlayed: {
-    
+    // marginBottom: '30px',
   },
   recentList: {
-    
+    display: 'flex',
+    justifyContent: 'flex-start',
   },
   nowPlaying: {
-   
+    marginTop: '10%',
+    marginRight: '2%'
   },
 };

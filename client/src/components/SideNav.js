@@ -3,12 +3,12 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import logo from '../images/logo.png';
 
-const SideNavigation = () => {
+const SideNavigation = ({ onLogout }) => {
   return (
     <nav style={styles.nav} className="d-flex flex-column justify-content-between align-items-start">
       <Link to='/dashboard'><img style={styles.img} src={logo} alt="EleutherosVibe logo"/></Link>
       <div style={styles.menu}>
-        <h3>Browse Music</h3>
+        <h5>Browse Music</h5>
         <ul style={styles.ul} className="d-flex flex-column">
           <li style={styles.li}> 
             <Link to="/dashboard" style={styles.link}>Home</Link>
@@ -22,7 +22,7 @@ const SideNavigation = () => {
         </ul>
       </div>
       <div style={styles.logout}>
-        <h3>Logout</h3>
+      <h5 onClick={onLogout} style={styles.logoutLink}>Logout</h5>
       </div>
     </nav>
   );
@@ -40,6 +40,7 @@ const styles = {
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
+    // position: 'fixed'
   },
   img: {
     height: '120px',
