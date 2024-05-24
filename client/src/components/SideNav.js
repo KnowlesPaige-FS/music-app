@@ -17,7 +17,7 @@ const SideNavigation = ({ onLogout }) => {
             <Link to="/albums" style={styles.link}>Albums</Link>
           </li>
           <li style={styles.li}>
-            <Link to="/genre" style={styles.link}>Genre</Link>
+            <Link to="/tracks" style={styles.link}>Songs</Link>
           </li>
         </ul>
       </div>
@@ -40,7 +40,9 @@ const styles = {
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
-    // position: 'fixed'
+    position: 'fixed',
+    top: 0,
+    left: 0,
   },
   img: {
     height: '120px',

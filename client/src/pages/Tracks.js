@@ -1,15 +1,14 @@
-// /* eslint-disable jsx-a11y/img-redundant-alt */
 import React, { useState, useEffect, useCallback } from 'react';
 import SideNavigation from '../components/SideNav';
 import SearchBar from '../components/SearchBar';
 import Circle from '../components/Circle';
 import Cards from '../components/Cards';
 import SmallCards from '../components/SmallCards';
-import axios from 'axios'
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-const Albums = ({ accessToken, onLogout }) => {
-  const [popularAlbums, setPopularAlbums] = useState([]);
+const Tracks = ({ accessToken, onLogout }) => {
+  const [popularArtists, setPopularArtists] = useState([]);
   const [trendingNow, setTrendingNow] = useState([]);
   const [recentlyPlayed, setRecentlyPlayed] = useState([]);
   const navigate = useNavigate();
@@ -31,33 +30,34 @@ const Albums = ({ accessToken, onLogout }) => {
     }
   }, [accessToken]);
 
-  const fetchPopularAlbums = useCallback(() => {
+  const fetchPopularArtists = useCallback(() => {
     if (accessToken) {
       axios
-        .get('https://api.spotify.com/v1/me/albums', {
+        .get('https://api.spotify.com/v1/me/top/tracks', {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
         })
         .then(response => {
-          setPopularAlbums(response.data.items.slice(1, 7));
+          setPopularArtists(response.data.items.slice(0, 6));
         })
         .catch(err => {
-          console.error('Error fetching popular albums:', err);
+          console.error('Error fetching popular artists:', err);
         });
     }
   }, [accessToken]);
 
+
   const fetchTrendingNow = useCallback(() => {
-    if (accessToken) {
-      axios
-        .get('https://api.spotify.com/v1/browse/new-releases', {
+      if (accessToken) {
+        axios
+        .get('https://api.spotify.com/v1/browse/categories?locale=en_US', {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
         })
         .then(response => {
-          setTrendingNow(response.data.albums.items.slice(0, 4));
+          setTrendingNow(response.data.categories.items.slice(0, 4));
         })
         .catch(err => {
           console.error('Error fetching trending now:', err);
@@ -67,9 +67,9 @@ const Albums = ({ accessToken, onLogout }) => {
 
   useEffect(() => {
     fetchRecentlyPlayed();
-    fetchPopularAlbums();
+    fetchPopularArtists();
     fetchTrendingNow();
-  }, [fetchRecentlyPlayed, fetchPopularAlbums, fetchTrendingNow]);
+  }, [fetchRecentlyPlayed, fetchPopularArtists, fetchTrendingNow]);
 
   const handleSearch = (query) => {
     if (accessToken) {
@@ -118,19 +118,19 @@ const Albums = ({ accessToken, onLogout }) => {
           <SearchBar onSearch={handleSearch} />
         </header>
         <main style={styles.mainContent}>
-          <section style={styles.popularAlbums}>
-            <h5>Your Favourite Albums</h5>
-            <div style={styles.albumList}>
-              {popularAlbums.map((album, index) => (
-                <Circle key={index} image={album.album.images[0]?.url || 'placeholder.jpg'} title={album.album.name} />
+          <section style={styles.popularSongs}>
+            <h5>Top Songs</h5>
+            <div style={styles.songList}>
+              {popularArtists.map((track, index) => (
+                <Circle key={index} image={track.album.images[0]?.url || 'placeholder.jpg'} title={track.name} />
               ))}
             </div>
           </section>
           <section style={styles.trendingNow}>
-            <h5>Trending Now</h5>
+            <h5>Recommendations</h5>
             <div style={styles.trendingList}>
-              {trendingNow.map((album, index) => (
-                <Cards key={index} img={album.images[0]?.url || 'placeholder.jpg'} title={album.name} />
+              {trendingNow.map((track, index) => (
+                <Cards key={index} img={track.icons[0]?.url || 'placeholder.jpg'} title={track.name} />
               ))}
             </div>
           </section>
@@ -138,7 +138,7 @@ const Albums = ({ accessToken, onLogout }) => {
             <h5>Recently Played</h5>
             <div style={styles.recentList}>
               {recentlyPlayed.map((track, index) => (
-                <SmallCards key={index} image={track.track.album.images[0]?.url || 'placeholder.jpg'} artistName={track.track.artists[0].name} songTitle={track.track.album.name} />
+                <SmallCards key={index} image={track.track.album.images[0]?.url || 'placeholder.jpg'} artistName={track.track.artists[0].name} songTitle={track.track.name} />
               ))}
             </div>
           </section>
@@ -146,9 +146,9 @@ const Albums = ({ accessToken, onLogout }) => {
       </section>
     </section>
   );
-}
+};
 
-export default Albums;
+export default Tracks;
 
 const styles = {
   container: {
@@ -166,22 +166,16 @@ const styles = {
     justifyContent: 'center',
     padding: '10px',
   },
-  searchBar: {
-    width: '300px',
-    padding: '10px',
-    border: '1px solid #DDD',
-    borderRadius: '5px',
-  },
   mainContent: {
     flex: 1,
     display: 'flex',
     flexDirection: 'column',
     padding: '20px 20px 0',
   },
-  popularAlbums: {
+  popularSongs: {
     marginBottom: '30px',
   },
-  albumList: {
+  songList: {
     display: 'flex',
     justifyContent: 'flex-start',
   },
@@ -201,6 +195,6 @@ const styles = {
   },
   nowPlaying: {
     marginTop: '10%',
-    marginRight: '2%'
+    marginRight: '2%',
   },
 };

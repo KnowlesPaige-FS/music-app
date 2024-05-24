@@ -4,7 +4,6 @@ import SearchBar from '../components/SearchBar';
 import Circle from '../components/Circle';
 import Cards from '../components/Cards';
 import SmallCards from '../components/SmallCards';
-import NowPlaying from '../components/NowPlaying';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
@@ -52,19 +51,19 @@ const Dashboard = ({ accessToken, onLogout }) => {
   const fetchTrendingNow = useCallback(() => {
     if (accessToken) {
       axios
-        .get('https://api.spotify.com/v1/browse/new-releases', {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        })
-        .then(response => {
-          setTrendingNow(response.data.albums.items.slice(0, 4));
-        })
-        .catch(err => {
-          console.error('Error fetching trending now:', err);
-        });
-    }
-  }, [accessToken]);
+      .get('https://api.spotify.com/v1/me/playlists', {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then(response => {
+        setTrendingNow(response.data.items.slice(7, 11));
+      })
+      .catch(err => {
+        console.error('Error fetching trending now:', err);
+      });
+  }
+}, [accessToken]);
 
   useEffect(() => {
     fetchRecentlyPlayed();
@@ -128,10 +127,10 @@ const Dashboard = ({ accessToken, onLogout }) => {
             </div>
           </section>
           <section style={styles.trendingNow}>
-            <h5>Trending Now</h5>
+            <h5>Your Playlists</h5>
             <div style={styles.trendingList}>
-              {trendingNow.map((album, index) => (
-                <Cards key={index} img={album.images[0]?.url || 'placeholder.jpg'} title={album.name} />
+              {trendingNow.map((track, index) => (
+                <Cards key={index} img={track.images[0]?.url || 'placeholder.jpg'} title={track.name} />
               ))}
             </div>
           </section>
@@ -145,9 +144,9 @@ const Dashboard = ({ accessToken, onLogout }) => {
           </section>
         </main>
       </section>
-      <aside style={styles.nowPlaying}>
+      {/* <aside style={styles.nowPlaying}>
         <NowPlaying songTitle="Song Title" artist="Artist Name" />
-      </aside>
+      </aside> */}
     </section>
   );
 };
@@ -157,6 +156,7 @@ export default Dashboard;
 const styles = {
   container: {
     display: 'flex',
+    marginLeft: '15%',
   },
   content: {
     flex: 1,

@@ -56,6 +56,7 @@ export default SearchResults;
 const styles = {
   container: {
     display: 'flex',
+    marginLeft: '15%',
   },
   content: {
     flex: 1,

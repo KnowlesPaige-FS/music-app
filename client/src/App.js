@@ -5,7 +5,7 @@ import Signup from './pages/Signup';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import Albums from './pages/Albums';
-import Genre from './pages/Genre';
+import Tracks from './pages/Tracks';
 import SearchResults from './pages/SearchResults';
 import axios from 'axios';
 
@@ -13,7 +13,7 @@ const CLIENT_ID = process.env.REACT_APP_SPOTIFY_CLIENT_ID;
 const REDIRECT_URI = process.env.REACT_APP_SPOTIFY_REDIRECT_URI;
 const AUTH_ENDPOINT = 'https://accounts.spotify.com/authorize';
 const RESPONSE_TYPE = 'code';
-const SCOPES = 'user-read-private user-read-email user-read-currently-playing user-read-recently-played user-top-read user-follow-read';
+const SCOPES = 'user-read-private user-read-email user-read-recently-played user-top-read user-follow-read user-library-read playlist-read-private';
 
 function App() {
   const [code, setCode] = useState(null);
@@ -98,9 +98,8 @@ function App() {
             <Route path='/signup' element={<Signup clientId={CLIENT_ID} redirectUri={REDIRECT_URI} authEndpoint={AUTH_ENDPOINT} responseType={RESPONSE_TYPE} scopes={SCOPES} />} />
             <Route path='/dashboard' element={<Dashboard accessToken={accessToken} onLogout={handleLogout} />} />
             <Route path='/albums' element={<Albums accessToken={accessToken} onLogout={handleLogout} />} />
-            <Route path='/genre' element={<Genre accessToken={accessToken} onLogout={handleLogout} />} />
+            <Route path='/tracks' element={<Tracks accessToken={accessToken} onLogout={handleLogout} />} />
             <Route path='/search-results' element={<SearchResults onSearch={handleSearch} />} />
-            {/* <Route path='/search-results' element={<SearchResults />} /> */}
           </Routes>
         </section>
       </main>
