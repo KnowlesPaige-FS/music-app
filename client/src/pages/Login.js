@@ -28,6 +28,7 @@ function Login({ clientId, redirectUri, authEndpoint, responseType, scopes }) {
 
 export default Login;
 
+
 const styles = {
   container: {
     textAlign: 'center',

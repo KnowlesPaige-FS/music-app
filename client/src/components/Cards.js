@@ -23,6 +23,7 @@ const styles = {
         overflow: 'hidden',
         boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
         margin: '2%',
+        background: '#E5E5E5'
     },
     cardImg: {
         width: '100%',

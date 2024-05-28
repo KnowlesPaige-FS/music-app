@@ -31,6 +31,7 @@ const styles = {
     width: '110px',
     fontSize: '1em',
     textAlign: 'center',
-    color: '#212529',
+    // color: '#212529',
+    color: '#E5E5E5'
   },
 };

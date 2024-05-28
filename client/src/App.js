@@ -48,6 +48,8 @@ function App() {
     navigate('/');
   };
 
+  
+
   const handleSearch = (query) => {
     if (accessToken) {
       axios
@@ -111,6 +113,9 @@ export default App;
 
 const styles = {
   main: {
-    
+  
   }
 };
+
+
+

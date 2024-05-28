@@ -36,13 +36,17 @@ const styles = {
     alignItems: 'center',
     justifyContent: 'center',
     margin: '20px',
+    color: '#E7E3F1'
+    
   },
   searchInput: {
     padding: '2.5%',
     width: '350px',
-    border: '1px solid #ccc',
+    // border: '1px solid #ccc',
+    border: '1px solid #E7E3F1',
     borderRadius: '5px',
     outline: 'none',
     fontSize: '1em',
+    background: 'transparent'
   },
 };

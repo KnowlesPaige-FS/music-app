@@ -57,6 +57,8 @@ const styles = {
   container: {
     display: 'flex',
     marginLeft: '15%',
+    background: '#33303F',
+    color: '#E7E3F1'
   },
   content: {
     flex: 1,
@@ -68,12 +70,15 @@ const styles = {
     display: 'flex',
     justifyContent: 'center',
     padding: '10px',
+    backgroundColor: '#2F2F3A',
+    marginBottom: '1%'
   },
   mainContent: {
     flex: 1,
     display: 'flex',
     flexDirection: 'column',
     padding: '20px 20px 0',
+    backgroundColor: '#2F2F3A',
   },
   artists: {
     marginBottom: '30px',
