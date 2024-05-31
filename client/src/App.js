@@ -17,7 +17,7 @@ const SCOPES = 'user-read-private user-read-email user-read-recently-played user
 
 function App() {
   const [code, setCode] = useState(null);
-  const [accessToken, setAccessToken] = useState(null);
+  const [accessToken, setAccessToken] = useState(localStorage.getItem('accessToken'));
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -27,13 +27,14 @@ function App() {
     if (codeParam) {
       setCode(codeParam);
     }
-  }, []);
+  }, [accessToken, navigate]);
 
   useEffect(() => {
     if (code) {
       axios.post('http://localhost:4000/login', { code })
         .then(response => {
           setAccessToken(response.data.accessToken);
+          localStorage.setItem('accessToken', response.data.accessToken);
           window.history.pushState({}, null, '/dashboard');
           navigate('/dashboard');
         })
@@ -45,10 +46,9 @@ function App() {
 
   const handleLogout = () => {
     setAccessToken(null);
-    navigate('/');
+    localStorage.removeItem('accessToken');
+    navigate('/login');
   };
-
-  
 
   const handleSearch = (query) => {
     if (accessToken) {
@@ -65,20 +65,23 @@ function App() {
               name: artist.name,
               image: artist.images[0]?.url || 'placeholder.jpg',
               type: 'Artist',
+              url: artist.external_urls.spotify,
             })));
           }
           if (response.data.tracks) {
-            results.push(...response.data.tracks.items.slice(0, 6).map(track => ({
+            results.push(...response.data.tracks.items.slice(0, 5).map(track => ({
               name: track.name,
               image: track.album.images[0]?.url || 'placeholder.jpg',
               type: 'Song',
+              url: track.external_urls.spotify,
             })));
           }
           if (response.data.albums) {
-            results.push(...response.data.albums.items.slice(0, 6).map(album => ({
+            results.push(...response.data.albums.items.slice(0, 5).map(album => ({
               name: album.name,
               image: album.images[0]?.url || 'placeholder.jpg',
               type: 'Album',
+              url: album.external_urls.spotify,
             })));
           }
           navigate('/search-results', { state: { results } });
@@ -101,7 +104,7 @@ function App() {
             <Route path='/dashboard' element={<Dashboard accessToken={accessToken} onLogout={handleLogout} />} />
             <Route path='/albums' element={<Albums accessToken={accessToken} onLogout={handleLogout} />} />
             <Route path='/tracks' element={<Tracks accessToken={accessToken} onLogout={handleLogout} />} />
-            <Route path='/search-results' element={<SearchResults onSearch={handleSearch} />} />
+            <Route path='/search-results' element={<SearchResults onSearch={handleSearch} onLogout={handleLogout}/>} />
           </Routes>
         </section>
       </main>
@@ -113,9 +116,6 @@ export default App;
 
 const styles = {
   main: {
-  
+    
   }
 };
-
-
-

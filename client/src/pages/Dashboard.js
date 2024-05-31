@@ -47,23 +47,22 @@ const Dashboard = ({ accessToken, onLogout }) => {
     }
   }, [accessToken]);
 
-
   const fetchTrendingNow = useCallback(() => {
     if (accessToken) {
       axios
-      .get('https://api.spotify.com/v1/me/playlists', {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
-      .then(response => {
-        setTrendingNow(response.data.items.slice(7, 11));
-      })
-      .catch(err => {
-        console.error('Error fetching trending now:', err);
-      });
-  }
-}, [accessToken]);
+        .get('https://api.spotify.com/v1/me/playlists', {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        })
+        .then(response => {
+          setTrendingNow(response.data.items.slice(0, 4));
+        })
+        .catch(err => {
+          console.error('Error fetching trending now:', err);
+        });
+    }
+  }, [accessToken]);
 
   useEffect(() => {
     fetchRecentlyPlayed();
@@ -86,20 +85,23 @@ const Dashboard = ({ accessToken, onLogout }) => {
               name: artist.name,
               image: artist.images[0]?.url || 'placeholder.jpg',
               type: 'Artist',
+              url: artist.external_urls.spotify,
             })));
           }
           if (response.data.tracks) {
-            results.push(...response.data.tracks.items.slice(0, 6).map(track => ({
+            results.push(...response.data.tracks.items.slice(0, 5).map(track => ({
               name: track.name,
               image: track.album.images[0]?.url || 'placeholder.jpg',
               type: 'Song',
+              url: track.external_urls.spotify,
             })));
           }
           if (response.data.albums) {
-            results.push(...response.data.albums.items.slice(0, 6).map(album => ({
+            results.push(...response.data.albums.items.slice(0, 5).map(album => ({
               name: album.name,
               image: album.images[0]?.url || 'placeholder.jpg',
               type: 'Album',
+              url: album.external_urls.spotify,
             })));
           }
           navigate('/search-results', { state: { results } });
@@ -122,15 +124,19 @@ const Dashboard = ({ accessToken, onLogout }) => {
             <h5>Favourite Artists</h5>
             <div style={styles.artistList}>
               {popularArtists.map((artist, index) => (
-                <Circle key={index} image={artist.images[0]?.url || 'placeholder.jpg'} title={artist.name} />
+                <a key={index} href={artist.external_urls.spotify} target="_blank" rel="noopener noreferrer" style={styles.link}>
+                  <Circle image={artist.images[0]?.url || 'placeholder.jpg'} title={artist.name} />
+                </a>
               ))}
             </div>
           </section>
           <section style={styles.trendingNow}>
             <h5>Your Playlists</h5>
             <div style={styles.trendingList}>
-              {trendingNow.map((track, index) => (
-                <Cards key={index} img={track.images[0]?.url || 'placeholder.jpg'} title={track.name} />
+              {trendingNow.map((playlist, index) => (
+                <a key={index} href={playlist.external_urls.spotify} target="_blank" rel="noopener noreferrer" style={styles.link}>
+                  <Cards img={playlist.images[0]?.url || 'placeholder.jpg'} title={playlist.name} />
+                </a>
               ))}
             </div>
           </section>
@@ -138,15 +144,14 @@ const Dashboard = ({ accessToken, onLogout }) => {
             <h5>Recently Played</h5>
             <div style={styles.recentList}>
               {recentlyPlayed.map((track, index) => (
-                <SmallCards key={index} image={track.track.album.images[0]?.url || 'placeholder.jpg'} artistName={track.track.artists[0].name} songTitle={track.track.name} />
+                <a key={index} href={track.track.external_urls.spotify} target="_blank" rel="noopener noreferrer" style={styles.link}>
+                  <SmallCards image={track.track.album.images[0]?.url || 'placeholder.jpg'} artistName={track.track.artists[0].name} songTitle={track.track.name} />
+                </a>
               ))}
             </div>
           </section>
         </main>
       </section>
-      {/* <aside style={styles.nowPlaying}>
-        <NowPlaying songTitle="Song Title" artist="Artist Name" />
-      </aside> */}
     </section>
   );
 };
@@ -195,18 +200,14 @@ const styles = {
     justifyContent: 'flex-start',
   },
   recentlyPlayed: {
-    // marginBottom: '30px',
+    marginBottom: '30px',
   },
   recentList: {
     display: 'flex',
     justifyContent: 'flex-start',
   },
-  nowPlaying: {
-    marginTop: '10%',
-    marginRight: '2%',
-  },
+  link: {
+    textDecoration: 'none',
+    margin: '1% 2%'
+  }
 };
-
-
-
-

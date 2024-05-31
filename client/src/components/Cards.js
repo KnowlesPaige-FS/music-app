@@ -17,7 +17,8 @@ export default Cards;
 
 const styles = {
     card: {
-        width: '200px',
+        width: '220px',
+        height: '310px',
         border: '1px solid #ccc',
         borderRadius: '10px',
         overflow: 'hidden',

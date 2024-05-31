@@ -4,6 +4,7 @@ import SideNavigation from '../components/SideNav';
 import Circle from '../components/Circle';
 import Cards from '../components/Cards';
 import SearchBar from '../components/SearchBar';
+import { Link } from 'react-router-dom';
 
 const SearchResults = ({ onSearch, onLogout }) => {
   const location = useLocation();
@@ -25,7 +26,9 @@ const SearchResults = ({ onSearch, onLogout }) => {
             <h5>Artists</h5>
             <div style={styles.artistList}>
                 {artists.map((artist, index) => (
-                <Circle key={index} image={artist.image} title={artist.name} />
+                    <Link to={artist.url}  key={index} target="_blank" rel="noopener noreferrer" style={styles.link}>
+                        <Circle image={artist.image} title={artist.name} />
+                     </Link>
                 ))}
             </div>
             </section>
@@ -33,7 +36,9 @@ const SearchResults = ({ onSearch, onLogout }) => {
             <h5>Songs</h5>
             <div style={styles.songList}>
                 {songs.map((song, index) => (
-                <Cards key={index} img={song.image} title={song.name} />
+                    <Link to={song.url} key={index} target="_blank" rel="noopener noreferrer" style={styles.link}>
+                        <Cards img={song.image} title={song.name} />
+                    </Link>
                 ))}
             </div>
             </section>
@@ -41,7 +46,9 @@ const SearchResults = ({ onSearch, onLogout }) => {
             <h5>Albums</h5>
             <div style={styles.albumList}>
                 {albums.map((album, index) => (
-                <Cards key={index} img={album.image} title={album.name} />
+                    <Link to={album.url} key={index} target="_blank" rel="noopener noreferrer" style={styles.link}>
+                        <Cards img={album.image} title={album.name} />
+                    </Link>
                 ))}
             </div>
             </section>
@@ -101,4 +108,8 @@ const styles = {
     display: 'flex',
     justifyContent: 'flex-start',
   },
+  link: {
+    textDecoration: 'none',
+    margin: '1%'
+  }
 };

@@ -42,7 +42,6 @@ const styles = {
   searchInput: {
     padding: '2.5%',
     width: '350px',
-    // border: '1px solid #ccc',
     border: '1px solid #E7E3F1',
     borderRadius: '5px',
     outline: 'none',
