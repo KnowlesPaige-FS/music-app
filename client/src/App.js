@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import Home from './pages/Home';
 import Signup from './pages/Signup';
@@ -18,7 +18,37 @@ const SCOPES = 'user-read-private user-read-email user-read-recently-played user
 function App() {
   const [code, setCode] = useState(null);
   const [accessToken, setAccessToken] = useState(localStorage.getItem('accessToken'));
+  const [refreshToken, setRefreshToken] = useState(localStorage.getItem('refreshToken'));
+  const [tokenExpiration, setTokenExpiration] = useState(localStorage.getItem('tokenExpiration'));
   const navigate = useNavigate();
+
+  const handleLogout = useCallback(() => {
+    setAccessToken(null);
+    setRefreshToken(null);
+    setTokenExpiration(null);
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('tokenExpiration');
+    navigate('/login');
+  }, [navigate]);
+
+  const refreshAccessToken = useCallback(() => {
+    if (refreshToken) {
+      axios.post('http://localhost:4000/refresh', { refreshToken })
+        .then(response => {
+          const { accessToken, expiresIn } = response.data;
+          setAccessToken(accessToken);
+          localStorage.setItem('accessToken', accessToken);
+          const newTokenExpiration = Date.now() + expiresIn * 1000;
+          setTokenExpiration(newTokenExpiration);
+          localStorage.setItem('tokenExpiration', newTokenExpiration);
+        })
+        .catch(err => {
+          console.error('Error refreshing access token:', err);
+          handleLogout();
+        });
+    }
+  }, [refreshToken, handleLogout]);
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -27,14 +57,20 @@ function App() {
     if (codeParam) {
       setCode(codeParam);
     }
-  }, [accessToken, navigate]);
+  }, []);
 
   useEffect(() => {
     if (code) {
       axios.post('http://localhost:4000/login', { code })
         .then(response => {
-          setAccessToken(response.data.accessToken);
-          localStorage.setItem('accessToken', response.data.accessToken);
+          const { accessToken, refreshToken, expiresIn } = response.data;
+          setAccessToken(accessToken);
+          setRefreshToken(refreshToken);
+          localStorage.setItem('accessToken', accessToken);
+          localStorage.setItem('refreshToken', refreshToken);
+          const newTokenExpiration = Date.now() + expiresIn * 1000;
+          setTokenExpiration(newTokenExpiration);
+          localStorage.setItem('tokenExpiration', newTokenExpiration);
           window.history.pushState({}, null, '/dashboard');
           navigate('/dashboard');
         })
@@ -44,11 +80,17 @@ function App() {
     }
   }, [code, navigate]);
 
-  const handleLogout = () => {
-    setAccessToken(null);
-    localStorage.removeItem('accessToken');
-    navigate('/login');
-  };
+  useEffect(() => {
+    if (tokenExpiration && Date.now() >= tokenExpiration) {
+      refreshAccessToken();
+    } else if (tokenExpiration) {
+      const timeout = setTimeout(() => {
+        refreshAccessToken();
+      }, tokenExpiration - Date.now());
+
+      return () => clearTimeout(timeout);
+    }
+  }, [tokenExpiration, refreshAccessToken]);
 
   const handleSearch = (query) => {
     if (accessToken) {
@@ -104,7 +146,7 @@ function App() {
             <Route path='/dashboard' element={<Dashboard accessToken={accessToken} onLogout={handleLogout} />} />
             <Route path='/albums' element={<Albums accessToken={accessToken} onLogout={handleLogout} />} />
             <Route path='/tracks' element={<Tracks accessToken={accessToken} onLogout={handleLogout} />} />
-            <Route path='/search-results' element={<SearchResults onSearch={handleSearch} onLogout={handleLogout}/>} />
+            <Route path='/search-results' element={<SearchResults onSearch={handleSearch} />} />
           </Routes>
         </section>
       </main>
@@ -116,6 +158,12 @@ export default App;
 
 const styles = {
   main: {
-    
+  
   }
 };
+
+
+
+
+
+

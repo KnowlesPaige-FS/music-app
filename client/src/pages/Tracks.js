@@ -124,7 +124,7 @@ const Tracks = ({ accessToken, onLogout }) => {
             <h5>Top Songs</h5>
             <div style={styles.songList}>
               {popularTracks.map((track, index) => (
-                <a key={index} href={track.external_urls.spotify} target="_blank" rel="noopener noreferrer" style={styles.link}>
+                <a key={index} href={track.external_urls.spotify} rel="noopener noreferrer" style={styles.link}>
                   <Circle image={track.album.images[0]?.url || 'placeholder.jpg'} title={track.name} />
                 </a>
               ))}
@@ -134,7 +134,7 @@ const Tracks = ({ accessToken, onLogout }) => {
             <h5>Recommendations</h5>
             <div style={styles.trendingList}>
               {trendingNow.map((category, index) => (
-                <a key={index} href={`https://open.spotify.com/genre/${category.id}`} target="_blank" rel="noopener noreferrer" style={styles.link}>
+                <a key={index} href={`https://open.spotify.com/genre/${category.id}`} rel="noopener noreferrer" style={styles.link}>
                   <Cards img={category.icons[0]?.url || 'placeholder.jpg'} title={category.name} />
                 </a>
               ))}
@@ -144,7 +144,7 @@ const Tracks = ({ accessToken, onLogout }) => {
             <h5>Recently Played</h5>
             <div style={styles.recentList}>
               {recentlyPlayed.map((track, index) => (
-                <a key={index} href={track.track.external_urls.spotify} target="_blank" rel="noopener noreferrer" style={styles.link}>
+                <a key={index} href={track.track.external_urls.spotify} rel="noopener noreferrer" style={styles.link}>
                   <SmallCards image={track.track.album.images[0]?.url || 'placeholder.jpg'} artistName={track.track.artists[0].name} songTitle={track.track.name} />
                 </a>
               ))}

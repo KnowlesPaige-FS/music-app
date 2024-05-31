@@ -26,7 +26,7 @@ const SearchResults = ({ onSearch, onLogout }) => {
             <h5>Artists</h5>
             <div style={styles.artistList}>
                 {artists.map((artist, index) => (
-                    <Link to={artist.url}  key={index} target="_blank" rel="noopener noreferrer" style={styles.link}>
+                    <Link to={artist.url}  key={index} rel="noopener noreferrer" style={styles.link}>
                         <Circle image={artist.image} title={artist.name} />
                      </Link>
                 ))}
@@ -36,7 +36,7 @@ const SearchResults = ({ onSearch, onLogout }) => {
             <h5>Songs</h5>
             <div style={styles.songList}>
                 {songs.map((song, index) => (
-                    <Link to={song.url} key={index} target="_blank" rel="noopener noreferrer" style={styles.link}>
+                    <Link to={song.url} key={index} rel="noopener noreferrer" style={styles.link}>
                         <Cards img={song.image} title={song.name} />
                     </Link>
                 ))}
@@ -46,7 +46,7 @@ const SearchResults = ({ onSearch, onLogout }) => {
             <h5>Albums</h5>
             <div style={styles.albumList}>
                 {albums.map((album, index) => (
-                    <Link to={album.url} key={index} target="_blank" rel="noopener noreferrer" style={styles.link}>
+                    <Link to={album.url} key={index} rel="noopener noreferrer" style={styles.link}>
                         <Cards img={album.image} title={album.name} />
                     </Link>
                 ))}

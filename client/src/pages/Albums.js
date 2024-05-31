@@ -125,7 +125,7 @@ const Albums = ({ accessToken, onLogout }) => {
             <h5>Your Favourite Albums</h5>
             <div style={styles.albumList}>
               {popularAlbums.map((album, index) => (
-                <a key={index} href={album.album.external_urls.spotify} target="_blank" rel="noopener noreferrer" style={styles.link}>
+                <a key={index} href={album.album.external_urls.spotify} rel="noopener noreferrer" style={styles.link}>
                   <Circle image={album.album.images[0]?.url || 'placeholder.jpg'} title={album.album.name} />
                 </a>
               ))}
@@ -135,7 +135,7 @@ const Albums = ({ accessToken, onLogout }) => {
             <h5>Trending Now</h5>
             <div style={styles.trendingList}>
               {trendingNow.map((album, index) => (
-                <a key={index} href={album.external_urls.spotify} target="_blank" rel="noopener noreferrer" style={styles.link}>
+                <a key={index} href={album.external_urls.spotify} rel="noopener noreferrer" style={styles.link}>
                   <Cards img={album.images[0]?.url || 'placeholder.jpg'} title={album.name} />
                 </a>
               ))}
@@ -145,7 +145,7 @@ const Albums = ({ accessToken, onLogout }) => {
             <h5>Recently Played</h5>
             <div style={styles.recentList}>
               {recentlyPlayed.map((track, index) => (
-                <a key={index} href={track.track.external_urls.spotify} target="_blank" rel="noopener noreferrer" style={styles.link}>
+                <a key={index} href={track.track.external_urls.spotify} rel="noopener noreferrer" style={styles.link}>
                   <SmallCards image={track.track.album.images[0]?.url || 'placeholder.jpg'} artistName={track.track.artists[0].name} songTitle={track.track.album.name} />
                 </a>
               ))}
