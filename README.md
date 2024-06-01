@@ -24,15 +24,21 @@ Before you begin, ensure you have Node.js installed on your machine. If not, you
 
 Clone the repository to your local machine:
 
+```
 git clone https://github.com/knowlespaige-fs/music-app.git
 cd music-app
+```
+
 
 ## Setup
 
 ### Backend Configuration:
 
 Navigate to the server directory:
+
+```
 cd server
+```
 
 Create a .env file in the server directory and add your Spotify API credentials:
 
@@ -42,35 +48,48 @@ Create a .env file in the server directory and add your Spotify API credentials:
 
 Install backend dependencies:
 
+```
 npm install
+```
 
 Start the backend server:
 
+```
 npm run dev
+```
 
 ### Frontend Configuration:
 
 Navigate to the client directory:
 
+```
 cd client
+```
+
 
 Create a .env file in the client directory and add your Spotify API credentials:
 
 - REACT_APP_SPOTIFY_CLIENT_ID=your_spotify_client_id
 - REACT_APP_SPOTIFY_REDIRECT_URI=http://localhost:3000/callback
 
+
 Install frontend dependencies:
 
+```
 npm install
+```
 
 Start the frontend development server:
 
+```
 npm start
+```
 
 ## Accessing the Project
 
 - Frontend: The frontend application will be running on http://localhost:3000
 - Backend: The backend server will be running on http://localhost:4000
+
 
 ## Endpoints
 
@@ -85,18 +104,21 @@ Method: POST
 Description: Handles user login using Spotify's authorization code grant flow.
 
 Request Body:
-
+```
 {
   "code": "authorization_code"
 }
+```
 
 Response:
-
+```
 {
   "accessToken": "spotify_access_token",
   "refreshToken": "spotify_refresh_token",
   "expiresIn": 3600
 }
+```
+
 
 #### Refresh Token:
 
@@ -107,17 +129,20 @@ Method: POST
 Description: Refreshes the Spotify access token using the refresh token.
 
 Request Body:
-
+```
 {
   "refreshToken": "spotify_refresh_token"
 }
+```
 
 Response:
-
+```
 {
   "accessToken": "new_spotify_access_token",
   "expiresIn": 3600
 }
+```
+
 
 #### Music Data
 
@@ -131,9 +156,11 @@ Description: Retrieves the current user's recently played tracks.
 
 Headers:
 
+```
 {
   "Authorization": "Bearer spotify_access_token"
 }
+```
 
 ##### Get User's Top Artists:
 
@@ -145,9 +172,11 @@ Description: Retrieves the current user's top artists.
 
 Headers:
 
+```
 {
   "Authorization": "Bearer spotify_access_token"
 }
+```
 
 ##### Get New Releases:
 
@@ -159,6 +188,8 @@ Description: Retrieves new album releases featured in Spotify.
 
 Headers:
 
+```
 {
   "Authorization": "Bearer spotify_access_token"
 }
+```
