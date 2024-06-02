@@ -110,6 +110,6 @@ const styles = {
   },
   link: {
     textDecoration: 'none',
-    margin: '1%'
+    margin: '1% 2%'
   }
 };
