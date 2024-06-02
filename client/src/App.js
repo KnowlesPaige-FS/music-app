@@ -146,7 +146,7 @@ function App() {
             <Route path='/dashboard' element={<Dashboard accessToken={accessToken} onLogout={handleLogout} />} />
             <Route path='/albums' element={<Albums accessToken={accessToken} onLogout={handleLogout} />} />
             <Route path='/tracks' element={<Tracks accessToken={accessToken} onLogout={handleLogout} />} />
-            <Route path='/search-results' element={<SearchResults onSearch={handleSearch} />} />
+            <Route path='/search-results' element={<SearchResults onSearch={handleSearch} onLogout={handleLogout} />} />
           </Routes>
         </section>
       </main>
